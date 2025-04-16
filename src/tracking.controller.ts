@@ -6,10 +6,7 @@ export class TrackingController {
   constructor(private readonly trackingService: TrackingService) {}
 
   @Post()
-  create(@Body() data: any, @Headers('authorization') auth: string) {
-    if (auth !== 'Basic your-secret-auth-key') {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
+  create(@Body() data: any) {
     return this.trackingService.handleTrackingData(data);
   }
 
@@ -18,20 +15,12 @@ export class TrackingController {
     @Query('lat') lat: string,
     @Query('lng') lng: string,
     @Query('num') num: string,
-    @Headers('authorization') auth: string,
   ) {
-    // Simple authentication check
-    if (auth !== 'Basic your-secret-auth-key') {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
-    
-    // Parse the coordinates
     const data = {
       lat: parseFloat(lat) || 0,
       lng: parseFloat(lng) || 0,
       num: num || 'unknown'
     };
-    
     return this.trackingService.handleTrackingData(data);
   }
 }
